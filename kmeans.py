@@ -10,6 +10,8 @@ class KMeans:
         self.data = data  # Data input, can be called X
         self.centroids = {}  # Position of centroids
         self.clusters = {}  # Clusters
+        self.all_centroids = {}
+        self.all_clusters = {}
 
     # Initialize the centroids randomly based on the position of the data
     def init_centroids(self):
@@ -40,11 +42,16 @@ class KMeans:
                 class_ = dist.index(min(dist))
                 # append the data to the cluster of the centroid
                 self.clusters[class_].append(xi)
+            
+            self.all_centroids[itr] = dict(self.centroids)
+            
+            self.all_clusters[itr] = self.clusters
 
             old_centroids = dict(self.centroids)
             for k in self.clusters:  # Update the position of each centroid based on the average distance from each data of the centroid
                 if len(self.clusters[k]) > 0:
                     self.centroids[k] = np.average(self.clusters[k], axis=0)
+         
 
             is_done = True
             for k in self.centroids:  # If the centroid doesnt change position end the run
