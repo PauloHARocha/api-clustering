@@ -51,7 +51,8 @@ def generate_results(dataset_id, algorithm_id, k):
                 algorithm.all_clusters[iter][cluster][data] = list(
                     algorithm.all_clusters[iter][cluster][data])
                 
-    
+    dimensions = algorithm.all_centroids[0][0].__len__()
     response = { 'centroids': algorithm.all_centroids,
-                 'clusters': algorithm.all_clusters}
+                 'clusters': algorithm.all_clusters,
+                 'dimensions': dimensions}
     return response
