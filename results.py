@@ -4,6 +4,7 @@ from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
 
 dataset = [datasets.load_iris()]
+
 algorithms = [KMeans]
 # colors = ["green", "red", "yellow", "blue", "purple",
 #           "orange", "brown", "pink", "gray", "cyan"] 
@@ -15,6 +16,9 @@ def get_dataset(dataset_id):
 def get_algorithm(algorithm_id):
     return algorithms[algorithm_id]
 
+def get_dataset_dimensions(dataset_id):
+    ds = dataset[dataset_id]
+    return ds.feature_names
 # def plt_scatter_clusters(clusters, centroids, colors, x, y):
 #     for k in clusters:
 #         color = colors[k]
@@ -51,7 +55,7 @@ def generate_results(dataset_id, algorithm_id, k):
                 algorithm.all_clusters[iter][cluster][data] = list(
                     algorithm.all_clusters[iter][cluster][data])
                 
-    dimensions = algorithm.all_centroids[0][0].__len__()
+    dimensions = get_dataset_dimensions(dataset_id)
     response = { 'centroids': algorithm.all_centroids,
                  'clusters': algorithm.all_clusters,
                  'dimensions': dimensions}

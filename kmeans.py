@@ -59,7 +59,7 @@ class KMeans:
                 centroid = self.centroids[k]
                 if np.linalg.norm(old_centroid - centroid) > self.tol:
                     is_done = False
-            print('itr: {}'.format(itr))
+            
             if is_done:
                 break
 
