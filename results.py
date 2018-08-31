@@ -31,8 +31,8 @@ def generate_results(dataset_id, algorithm_id, k):
     algorithm = get_algorithm(algorithm_id)
 
     # Normalize the dimension value to a float value with range 0 - 1
-    # std = MinMaxScaler()
-    # X = std.fit_transform(X)
+    std = MinMaxScaler()
+    X = std.fit_transform(X)
     
     algorithm = algorithm(data=X, k=k)
     algorithm.fit()
