@@ -1,11 +1,12 @@
 import numpy as np
 from kmeans import KMeans
+from fcmeans import FCMeans
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
 
-dataset = [datasets.load_iris()]
+dataset = [datasets.load_iris(), datasets.load_wine(), datasets.load_diabetes()]
 
-algorithms = [KMeans]
+algorithms = [KMeans, FCMeans]
 # colors = ["green", "red", "yellow", "blue", "purple",
 #           "orange", "brown", "pink", "gray", "cyan"] 
 
