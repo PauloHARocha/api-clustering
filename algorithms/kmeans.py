@@ -28,7 +28,7 @@ class KMeans:
 
         if k is not None:
             self.k = k
-
+        
         self.init_centroids()
 
         for itr in range(self.n_iter):
@@ -76,3 +76,6 @@ class KMeans:
                     for c in self.centroids]
             class_ = dist.index(min(dist))
             return class_
+
+    def __str__(self):
+        return 'K-means'

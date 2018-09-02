@@ -1,14 +1,12 @@
 import numpy as np
-from kmeans import KMeans
-from fcmeans import FCMeans
+from algorithms.kmeans import KMeans
+from algorithms.fcmeans import FCMeans
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
 
 dataset = [datasets.load_iris(), datasets.load_wine(), datasets.load_diabetes()]
 
 algorithms = [KMeans, FCMeans]
-# colors = ["green", "red", "yellow", "blue", "purple",
-#           "orange", "brown", "pink", "gray", "cyan"] 
 
 def get_dataset(dataset_id):
     ds = dataset[dataset_id]
@@ -20,18 +18,8 @@ def get_algorithm(algorithm_id):
 def get_dataset_dimensions(dataset_id):
     ds = dataset[dataset_id]
     return ds.feature_names
-# def plt_scatter_clusters(clusters, centroids, colors, x, y):
-#     for k in clusters:
-#         color = colors[k]
-#         for xi in clusters[k]:
-#             plt.scatter(xi[x], xi[y], color=color, s=10)
-#         plt.scatter(centroids[k][x], centroids[k][y],
-#                     color="black", marker="x", s=20)
-#         plt.ylabel(y)
-#         plt.xlabel(x)
-#     return plt
 
-def generate_results(dataset_id, algorithm_id, k):
+def generate_iterations(dataset_id, algorithm_id, k):
     X = get_dataset(dataset_id)
     algorithm = get_algorithm(algorithm_id)
 

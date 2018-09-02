@@ -29,12 +29,12 @@ class FCMeans(object):
                 updated_degree_of_membership = 1 / sum(all_norms)
                 self.degree_of_membership[idx][idx_] = updated_degree_of_membership
 
-    def fit(self, data=None, n_clusters=None):
+    def fit(self, data=None, k=None):
 
         if data is not None:
             self.data = data
-        if n_clusters is not None:
-            self.k = n_clusters
+        if k is not None:
+            self.k = k
 
         self.init_centroids()
 
@@ -93,3 +93,6 @@ class FCMeans(object):
 
         for data, cluster in zip(self.data, _class):
             self.clusters[cluster].append(data)
+
+    def __str__(self):
+        return 'FC-means'
