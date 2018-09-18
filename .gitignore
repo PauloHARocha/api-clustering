@@ -1,3 +1,5 @@
 settings.json
 /images
 /__pycache__
+.vscode
+/custom_datasets

@@ -19,7 +19,7 @@ def get_dataset_dimensions(dataset_id):
     ds = dataset[dataset_id]
     return ds.feature_names
 
-def generate_iterations(dataset_id, algorithm_id, k):
+def generate_iterations(dataset_id, algorithm_id, k, m):
     X = get_dataset(dataset_id)
     algorithm = get_algorithm(algorithm_id)
 
@@ -27,22 +27,26 @@ def generate_iterations(dataset_id, algorithm_id, k):
     std = MinMaxScaler()
     X = std.fit_transform(X)
     
-    algorithm = algorithm(data=X, k=k)
+    if algorithm_id == 1:
+        algorithm = algorithm(data=X, k=k, fuzzy_c=m)
+    else:
+        algorithm = algorithm(data=X, k=k)
+
     algorithm.fit()
     
-    for iter in algorithm.all_centroids:
-        for centroid in algorithm.all_centroids[iter]:
-            algorithm.all_centroids[iter][centroid] = list(
-                algorithm.all_centroids[iter][centroid])
+    for itr in algorithm.all_centroids:
+        for centroid in algorithm.all_centroids[itr]:
+            algorithm.all_centroids[itr][centroid] = list(
+                algorithm.all_centroids[itr][centroid])
     
-    for iter in algorithm.all_clusters:
-        for cluster in algorithm.all_clusters[iter]:
-            algorithm.all_clusters[iter][cluster] = list(
-            algorithm.all_clusters[iter][cluster])
+    for itr in algorithm.all_clusters:
+        for cluster in algorithm.all_clusters[itr]:
+            algorithm.all_clusters[itr][cluster] = list(
+            algorithm.all_clusters[itr][cluster])
             
-            for data in range(len(algorithm.all_clusters[iter][cluster])):
-                algorithm.all_clusters[iter][cluster][data] = list(
-                    algorithm.all_clusters[iter][cluster][data])
+            for data in range(len(algorithm.all_clusters[itr][cluster])):
+                algorithm.all_clusters[itr][cluster][data] = list(
+                    algorithm.all_clusters[itr][cluster][data])
                 
     dimensions = get_dataset_dimensions(dataset_id)
     response = { 'centroids': algorithm.all_centroids,
