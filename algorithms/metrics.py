@@ -98,3 +98,31 @@ class Metrics:
     @staticmethod
     def variance_based_ch(data, centroids):
         return truediv(len(data) - len(centroids), len(centroids) - 1) * truediv(Metrics.inter_cluster_statistic(centroids), Metrics.intra_cluster_statistic(data, centroids))
+
+     #Sep(C)
+    @staticmethod
+    def cluster_separation(centroids):
+        return 2*Metrics.inter_cluster_statistic(centroids) / (len(centroids) * (len(centroids)-1))
+
+    #Ball & Hall index
+    @staticmethod
+    def ball_hall_index(data, centroids):
+        return Metrics.intra_cluster_statistic(data, centroids) / len(data)
+
+    #Hartigan
+    @staticmethod
+    def hartigan_index(data, centroids):
+        return np.log(Metrics.inter_cluster_statistic(centroids) / Metrics.intra_cluster_statistic(data, centroids))
+
+    #Xu Index
+    @staticmethod
+    def xu_index(data, centroids):
+        D = len(centroids[0])
+        N = len(data)
+        K = len(centroids)
+        return D * np.log(Metrics.intra_cluster_statistic(data, centroids) / (D * N**2)) + np.log(K)
+
+    #WB index
+    @staticmethod
+    def wb_index(data, centroids):
+        return len(centroids) * (Metrics.intra_cluster_statistic(data, centroids) / Metrics.inter_cluster_statistic(centroids))

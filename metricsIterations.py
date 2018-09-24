@@ -25,18 +25,27 @@ def execMetrics(dataset, algorithm, k, metrics, normalize=True):
         for itr in tqdm(range(len(ag_exec.all_centroids)), desc='{}'.format(met['name'])):
             clusters = ag_exec.all_clusters[itr]
             centroids = ag_exec.all_centroids[itr]
+            name = met['name']
+            metric = met['metric']
 
-            if met['name'] == 'silhouette':
-                mets_results[met['name']].append(met['metric'](clusters, len(dataset)))
-            elif met['name'] == 'ch-index':
-                mets_results[met['name']].append(met['metric'](dataset, centroids))
-            elif met['name'] == 'gap':
-                random_data = np.random.uniform(0, 1, dataset.shape)
-                ag_aux = algorithm(data=random_data)
-                ag_aux.fit(k=k) 
-                random_clusters = ag_aux.all_clusters[itr]
-
-                mets_results[met['name']].append(met['metric'](clusters, random_clusters))
+            if name == 'inter-cluster':
+                mets_results[name].append(metric(centroids))
+            if name == 'cluster-separation':
+                mets_results[name].append(metric(centroids))
+            if name == 'intra-cluster':
+                mets_results[name].append(metric(dataset, centroids))
+            if name == 'ball-hall':
+                mets_results[name].append(metric(dataset, centroids))
+            elif name == 'ch-index':
+                mets_results[name].append(metric(dataset, centroids))
+            elif name == 'hartigan':
+                mets_results[name].append(metric(dataset, centroids))
+            elif name == 'xu-index':
+                mets_results[name].append(metric(dataset, centroids))
+            elif name == 'wb-index':
+                mets_results[name].append(metric(dataset, centroids))
+            if name == 'silhouette':
+                mets_results[name].append(metric(clusters, len(dataset)))
     
     rs_centroids=[]
     for itr in ag_exec.all_centroids:
@@ -78,13 +87,33 @@ def generate_metrics_iterations(dataset_id, algorithm_id, k):
     algorithms = [KMeans, FCMeans]
 
     metrics = [
-        {'metric': Metrics.silhouette,
-         'name': 'silhouette'
+        {'metric': Metrics.inter_cluster_statistic,
+         'name': 'inter-cluster'
+         },
+        {'metric': Metrics.cluster_separation,
+         'name': 'cluster-separation'
+         },
+        {'metric': Metrics.intra_cluster_statistic,
+         'name': 'intra-cluster'
+         },
+        {'metric': Metrics.ball_hall_index,
+         'name': 'ball-hall'
          },
         {'metric': Metrics.variance_based_ch,
-         'name': 'ch-index'}]
-    # {'metric': Metrics.gap_statistic,
-    # 'name': 'gap'}]
+         'name': 'ch-index'
+         },
+        {'metric': Metrics.hartigan_index,
+         'name': 'hartigan'
+         },
+        {'metric': Metrics.xu_index,
+         'name': 'xu-index'
+         },
+        {'metric': Metrics.wb_index,
+         'name': 'wb-index'
+         },
+        {'metric': Metrics.silhouette,
+         'name': 'silhouette'
+         },]
 
     dataset = ds[dataset_id]
     dataset = dataset.data[:, :]
