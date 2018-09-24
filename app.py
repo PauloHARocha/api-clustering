@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 from iterations import generate_iterations
 from comparison import generate_comparision
 from metricsIterations import generate_metrics_iterations
+from multiMetricsIterations import generate_multi_metrics_iterations
 from metricsCustomDB import generate_metrics_datasets
 from flask_cors import CORS
 
@@ -52,6 +53,10 @@ class MetricIterations(Resource):
     def get(self, dataset_id, algorithm_id, k):
         return generate_metrics_iterations(dataset_id, algorithm_id, k)
 
+class MultiMetricIterations(Resource):
+    def get(self, dataset_id, algorithm_id, k, n_sim):
+        return generate_multi_metrics_iterations(dataset_id, algorithm_id, k, n_sim)
+
 class MetricCustomDS(Resource):
     def get(self, algorithm_id, k):
         return generate_metrics_datasets(algorithm_id, k)
@@ -65,6 +70,9 @@ api.add_resource(
 
 api.add_resource(
     MetricIterations, '/metrics_iterations/<int:dataset_id>/<int:algorithm_id>/<int:k>')
+
+api.add_resource(
+    MultiMetricIterations, '/multi_metrics_iterations/<int:dataset_id>/<int:algorithm_id>/<int:k>/<int:n_sim>')
 
 api.add_resource(
     MetricCustomDS, '/metrics_customds/<int:algorithm_id>/<int:k>')
