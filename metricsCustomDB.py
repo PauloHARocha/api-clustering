@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
-from tqdm import tqdm
+# from tqdm import tqdm
 from algorithms.kmeans import KMeans
 from algorithms.fcmeans import FCMeans
 from algorithms.metrics import Metrics
@@ -32,7 +32,8 @@ def execMetricsDatasets(datasets, algorithm, k, metrics):
         for met in metrics:
             mets_results[met['name']] = []
             
-        for met in tqdm(range(len(metrics)), desc='dataset: {}'.format(ds)):
+        # for met in tqdm(range(len(metrics)), desc='dataset: {}'.format(ds)):
+        for met in range(len(metrics)):
             name = metrics[met]['name']
             metric = metrics[met]['metric']
             

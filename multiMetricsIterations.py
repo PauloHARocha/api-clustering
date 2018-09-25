@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
-from tqdm import tqdm
+# from tqdm import tqdm
 from algorithms.kmeans import KMeans
 from algorithms.fcmeans import FCMeans
 from algorithms.metrics import Metrics
@@ -20,13 +20,15 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
     rs_clusters = []
 
     ag_exec = algorithm(data=dataset)
-    for sim in tqdm(range(n_sim)):    
+    # for sim in tqdm(range(n_sim)):    
+    for sim in range(n_sim):    
         ag_exec.fit(k=k)
 
         aux_results = {}
         for met in metrics:
             aux_results[met['name']] = []
-            for itr in tqdm(range(len(ag_exec.all_centroids)), desc='{}'.format(met['name'])):
+            # for itr in tqdm(range(len(ag_exec.all_centroids)), desc='{}'.format(met['name'])):
+            for itr in range(len(ag_exec.all_centroids)):
                 clusters = ag_exec.all_clusters[itr]
                 centroids = ag_exec.all_centroids[itr]
                 name = met['name']
