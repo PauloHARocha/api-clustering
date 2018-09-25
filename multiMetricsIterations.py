@@ -17,6 +17,8 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
     mets_results = {}
     for met in metrics:
         mets_results[met['name']] = []
+    rs_centroids = []
+    rs_clusters = []
 
     ag_exec = algorithm(data=dataset)
     for sim in tqdm(range(n_sim)):    
@@ -53,6 +55,40 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
         for met in metrics:
             mets_results[met['name']].append(aux_results[met['name']])
 
+        centroids = ag_exec.all_centroids
+        clusters = ag_exec.all_clusters
+        aux_centroids = []
+        aux_clusters = []
+        for itr in ag_exec.all_centroids:
+            itr_centroids = []
+            itr_clusters = []
+            for centroid in centroids[itr]:
+                centroids[itr][centroid] = list(centroids[itr][centroid])
+                
+            for cluster in clusters[itr]:
+                clusters[itr][cluster] = list(clusters[itr][cluster])
+                for data in range(len(clusters[itr][cluster])):
+                    clusters[itr][cluster][data] = list(
+                        clusters[itr][cluster][data])
+        
+            
+            for cent in centroids[itr]:
+                itr_centroids.append({
+                    'name': cent,
+                    'values': centroids[itr][cent]
+                })
+            
+            for clust in clusters[itr]:
+                itr_clusters.append({
+                    'name': clust,
+                    'values': clusters[itr][clust]
+                })
+            aux_centroids.append(itr_centroids)
+            aux_clusters.append(itr_clusters)
+        
+        rs_centroids.append(aux_centroids)
+        rs_clusters.append(aux_clusters)
+        
     rs_metrics = []
     for met in mets_results:
         rs_metrics.append(
@@ -61,7 +97,10 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
                 'values': mets_results[met]
             }
         )
+    
     response = {
+        'centroids': rs_centroids,
+        'clusters': rs_clusters,
         'results': rs_metrics,
     }
     return response
