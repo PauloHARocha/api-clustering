@@ -377,3 +377,50 @@ class Metrics:
                             mmc_den += distance.euclidean(clusters[k1][kk1], clusters[k2][kk2])
         mmc = truediv(mmc, mmc_den)
         return -mmc
+
+    @staticmethod
+    def evaluate(metric, dataset, centroids, clusters, algorithm, k):
+        if metric == 'inter-cluster':
+            return Metrics.inter_cluster_statistic(centroids)
+        elif metric == 'cluster-separation':
+            return Metrics.cluster_separation(centroids)
+        elif metric == 'abgss':
+            return Metrics.abgss(dataset, centroids, clusters)
+        elif metric == 'edge-index':
+            return Metrics.edge_index(dataset, centroids, clusters)
+        elif metric == 'cluster-connectedness':
+            return Metrics.cluster_connectedness(dataset, centroids, clusters)
+        elif metric == 'intra-cluster':
+            return Metrics.intra_cluster_statistic(dataset, centroids)
+        elif metric == 'ball-hall':
+            return Metrics.ball_hall_index(dataset, centroids)
+        elif metric == 'twc-variance':
+            return Metrics.total_within_cluster_variance(dataset, centroids, clusters)
+        elif metric == 'intracluster-entropy':
+            return Metrics.intra_cluster_entropy(dataset, centroids)
+        elif metric == 'ch-index':
+            return Metrics.variance_based_ch(dataset, centroids)
+        elif metric == 'hartigan':
+            return Metrics.hartigan_index(dataset, centroids)
+        elif metric == 'xu-index':
+            return Metrics.xu_index(dataset, centroids)
+        elif metric == 'rl-index':
+            return np.mean(Metrics.rl(dataset, centroids, clusters))
+        elif metric == 'wb-index':
+            return Metrics.wb_index(dataset, centroids)
+        elif metric == 'dunn-index':
+            return Metrics.dunn_index(dataset, centroids, clusters)
+        elif metric == 'davies-bouldin':
+            return Metrics.davies_bouldin(dataset, centroids, clusters)
+        elif metric == 'cs-measure':
+            return Metrics.cs_measure(dataset, centroids, clusters)
+        elif metric == 'silhouette':
+            return Metrics.silhouette(clusters, len(dataset))
+        elif metric == 'min-max-cut':
+            return Metrics.min_max_cut(dataset, centroids, clusters)
+        elif metric == 'gap':
+            random_data = np.random.uniform(0, 1, dataset.shape)
+            ag_aux = algorithm(data=random_data)
+            ag_aux.fit(k=k)
+            random_clusters = ag_aux.clusters
+            return Metrics.gap_statistic(clusters, random_clusters)
