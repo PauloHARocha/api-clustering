@@ -58,8 +58,8 @@ class MultiMetricIterations(Resource):
         return generate_multi_metrics_iterations(dataset_id, algorithm_id, k, n_sim)
 
 class MetricCustomDS(Resource):
-    def get(self, algorithm_id, k):
-        return generate_metrics_datasets(algorithm_id, k)
+    def get(self, ds_idx, algorithm_id, k):
+        return generate_metrics_datasets(algorithm_id, k, ds_idx)
 
 api.add_resource(Param, '/param')
 
@@ -75,7 +75,7 @@ api.add_resource(
     MultiMetricIterations, '/multi_metrics_iterations/<int:dataset_id>/<int:algorithm_id>/<int:k>/<int:n_sim>')
 
 api.add_resource(
-    MetricCustomDS, '/metrics_customds/<int:algorithm_id>/<int:k>')
+    MetricCustomDS, '/metrics_customds/<int:ds_idx>/<int:algorithm_id>/<int:k>')
 
 if __name__ == '__main__':
     app.run(debug=True)

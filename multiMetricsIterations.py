@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
-# from tqdm import tqdm
+from tqdm import tqdm
 from algorithms.kmeans import KMeans
 from algorithms.fcmeans import FCMeans
 from algorithms.metrics import Metrics
@@ -20,15 +20,13 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
     rs_clusters = []
 
     ag_exec = algorithm(data=dataset)
-    # for sim in tqdm(range(n_sim)):    
-    for sim in range(n_sim):    
+    for sim in tqdm(range(n_sim)):    
         ag_exec.fit(k=k)
 
         aux_results = {}
         for met in metrics:
             aux_results[met['name']] = []
-            # for itr in tqdm(range(len(ag_exec.all_centroids)), desc='{}'.format(met['name'])):
-            for itr in range(len(ag_exec.all_centroids)):
+            for itr in tqdm(range(len(ag_exec.all_centroids)), desc='{}'.format(met['name'])):
                 clusters = ag_exec.all_clusters[itr]
                 centroids = ag_exec.all_centroids[itr]
                 name = met['name']
@@ -36,11 +34,21 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
 
                 if name == 'inter-cluster':
                     aux_results[name].append(metric(centroids))
-                if name == 'cluster-separation':
+                elif name == 'cluster-separation':
                     aux_results[name].append(metric(centroids))
-                if name == 'intra-cluster':
+                elif name == 'abgss':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
+                elif name == 'edge-index':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
+                elif name == 'cluster-connectedness':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
+                elif name == 'intra-cluster':
                     aux_results[name].append(metric(dataset, centroids))
-                if name == 'ball-hall':
+                elif name == 'ball-hall':
+                    aux_results[name].append(metric(dataset, centroids))
+                elif name == 'twc-variance':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
+                elif name == 'intracluster-entropy':
                     aux_results[name].append(metric(dataset, centroids))
                 elif name == 'ch-index':
                     aux_results[name].append(metric(dataset, centroids))
@@ -48,10 +56,20 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
                     aux_results[name].append(metric(dataset, centroids))
                 elif name == 'xu-index':
                     aux_results[name].append(metric(dataset, centroids))
+                elif name == 'rl-index':
+                    aux_results[name].append(np.mean(metric(dataset, centroids, clusters)))
                 elif name == 'wb-index':
                     aux_results[name].append(metric(dataset, centroids))
-                if name == 'silhouette':
+                elif name == 'dunn-index':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
+                elif name == 'davies-bouldin':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
+                elif name == 'cs-measure':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
+                elif name == 'silhouette':
                     aux_results[name].append(metric(clusters, len(dataset)))
+                elif name == 'min-max-cut':
+                    aux_results[name].append(metric(dataset, centroids, clusters))
 
         for met in metrics:
             mets_results[met['name']].append(aux_results[met['name']])
@@ -98,7 +116,7 @@ def execMetrics(dataset, algorithm, k, metrics, n_sim, normalize=True):
                 'values': mets_results[met]
             }
         )
-    
+    print(rs_metrics)
     response = {
         'centroids': rs_centroids,
         'clusters': rs_clusters,
@@ -120,11 +138,26 @@ def generate_multi_metrics_iterations(dataset_id, algorithm_id, k, n_sim):
         {'metric': Metrics.cluster_separation,
          'name': 'cluster-separation'
          },
+        {'metric': Metrics.abgss,
+         'name': 'abgss'
+         },
+        {'metric': Metrics.edge_index,
+         'name': 'edge-index'
+         },
+        {'metric': Metrics.cluster_connectedness,
+         'name': 'cluster-connectedness'
+         },
         {'metric': Metrics.intra_cluster_statistic,
          'name': 'intra-cluster'
          },
         {'metric': Metrics.ball_hall_index,
          'name': 'ball-hall'
+         },
+        # {'metric': Metrics.total_within_cluster_variance,
+        #  'name': 'twc-variance'
+        #  },
+        {'metric': Metrics.intra_cluster_entropy,
+         'name': 'intracluster-entropy'
          },
         {'metric': Metrics.variance_based_ch,
          'name': 'ch-index'
@@ -135,12 +168,28 @@ def generate_multi_metrics_iterations(dataset_id, algorithm_id, k, n_sim):
         {'metric': Metrics.xu_index,
          'name': 'xu-index'
          },
+        # {'metric': Metrics.rl,
+        #  'name': 'rl-index'
+        #  },
         {'metric': Metrics.wb_index,
          'name': 'wb-index'
          },
+        {'metric': Metrics.dunn_index,
+         'name': 'dunn-index'
+         },
+        {'metric': Metrics.davies_bouldin,
+         'name': 'davies-bouldin'
+         },
+        {'metric': Metrics.cs_measure,
+         'name': 'cs-measure'
+         },
         {'metric': Metrics.silhouette,
          'name': 'silhouette'
-         }, ]
+         },
+        {'metric': Metrics.min_max_cut,
+         'name': 'min-max-cut'
+         },
+         ]
 
     dataset = ds[dataset_id]
     dataset = dataset.data[:, :]

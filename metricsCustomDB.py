@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
-# from tqdm import tqdm
+from tqdm import tqdm
 from algorithms.kmeans import KMeans
 from algorithms.fcmeans import FCMeans
 from algorithms.metrics import Metrics
@@ -32,18 +32,27 @@ def execMetricsDatasets(datasets, algorithm, k, metrics):
         for met in metrics:
             mets_results[met['name']] = []
             
-        # for met in tqdm(range(len(metrics)), desc='dataset: {}'.format(ds)):
-        for met in range(len(metrics)):
+        for met in tqdm(range(len(metrics)), desc='dataset: {}'.format(ds)):
             name = metrics[met]['name']
             metric = metrics[met]['metric']
             
             if name == 'inter-cluster':
                 mets_results[name].append(metric(centroids))
-            if name == 'cluster-separation':
+            elif name == 'cluster-separation':
                 mets_results[name].append(metric(centroids))
-            if name == 'intra-cluster':
+            elif name == 'abgss':
+                mets_results[name].append(metric(dataset, centroids, clusters))
+            elif name == 'edge-index':
+                mets_results[name].append(metric(dataset, centroids, clusters))
+            elif name == 'cluster-connectedness':
+                mets_results[name].append(metric(dataset, centroids, clusters))
+            elif name == 'intra-cluster':
                 mets_results[name].append(metric(dataset, centroids))
-            if name == 'ball-hall':
+            elif name == 'ball-hall':
+                mets_results[name].append(metric(dataset, centroids))
+            elif name == 'twc-variance':
+                mets_results[name].append(metric(dataset, centroids, clusters))
+            elif name == 'intracluster-entropy':
                 mets_results[name].append(metric(dataset, centroids))
             elif name == 'ch-index':
                 mets_results[name].append(metric(dataset, centroids))
@@ -51,10 +60,21 @@ def execMetricsDatasets(datasets, algorithm, k, metrics):
                 mets_results[name].append(metric(dataset, centroids))
             elif name == 'xu-index':
                 mets_results[name].append(metric(dataset, centroids))
+            elif name == 'rl-index':
+                mets_results[name].append(
+                    np.mean(metric(dataset, centroids, clusters)))
             elif name == 'wb-index':
                 mets_results[name].append(metric(dataset, centroids))
-            if name == 'silhouette':
+            elif name == 'dunn-index':
+                mets_results[name].append(metric(dataset, centroids, clusters))
+            elif name == 'davies-bouldin':
+                mets_results[name].append(metric(dataset, centroids, clusters))
+            elif name == 'cs-measure':
+                mets_results[name].append(metric(dataset, centroids, clusters))
+            elif name == 'silhouette':
                 mets_results[name].append(metric(clusters, len(dataset)))
+            elif name == 'min-max-cut':
+                mets_results[name].append(metric(dataset, centroids, clusters))
             elif name == 'gap':
                 random_data = np.random.uniform(0, 1, dataset.shape)
                 ag_aux = algorithm(data=random_data)
@@ -103,7 +123,7 @@ def execMetricsDatasets(datasets, algorithm, k, metrics):
     return response
 
 
-def generate_metrics_datasets(algorithm_id, k):
+def generate_metrics_datasets(algorithm_id, k, ds_idx):
     algorithms = [KMeans, FCMeans]
 
     metrics = [
@@ -113,11 +133,26 @@ def generate_metrics_datasets(algorithm_id, k):
         {'metric': Metrics.cluster_separation,
          'name': 'cluster-separation'
          },
+        {'metric': Metrics.abgss,
+         'name': 'abgss'
+         },
+        {'metric': Metrics.edge_index,
+         'name': 'edge-index'
+         },
+        {'metric': Metrics.cluster_connectedness,
+         'name': 'cluster-connectedness'
+         },
         {'metric': Metrics.intra_cluster_statistic,
          'name': 'intra-cluster'
          },
         {'metric': Metrics.ball_hall_index,
          'name': 'ball-hall'
+         },
+        # {'metric': Metrics.total_within_cluster_variance,
+        #  'name': 'twc-variance'
+        #  },
+        {'metric': Metrics.intra_cluster_entropy,
+         'name': 'intracluster-entropy'
          },
         {'metric': Metrics.variance_based_ch,
          'name': 'ch-index'
@@ -128,19 +163,34 @@ def generate_metrics_datasets(algorithm_id, k):
         {'metric': Metrics.xu_index,
          'name': 'xu-index'
          },
+        # {'metric': Metrics.rl,
+        #  'name': 'rl-index'
+        #  },
         {'metric': Metrics.wb_index,
          'name': 'wb-index'
          },
+        {'metric': Metrics.dunn_index,
+         'name': 'dunn-index'
+         },
+        {'metric': Metrics.davies_bouldin,
+         'name': 'davies-bouldin'
+         },
+        {'metric': Metrics.cs_measure,
+         'name': 'cs-measure'
+         },
         {'metric': Metrics.silhouette,
          'name': 'silhouette'
+         },
+        {'metric': Metrics.min_max_cut,
+         'name': 'min-max-cut'
          },
         {'metric': Metrics.gap_statistic,
         'name': 'gap'}]
 
     custom_ds = []
-    for idx in range(23): #23
+    for idx in range(12): #23
         #Importing dataset
-        ds = pd.read_csv("custom_datasets/dataBase_{}.csv".format(idx))
+        ds = pd.read_csv("custom_datasets/{}/dataBase_{}.csv".format(ds_idx,idx))
         #Select lines and columns 
         custom_ds.append(ds.iloc[:, [1, 2]].values)
     
