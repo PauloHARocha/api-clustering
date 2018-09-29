@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import json
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
 from algorithms.kmeans import KMeans
@@ -52,7 +53,7 @@ def execMetricsDatasets(datasets, algorithm, k, metrics, n_sim):
 
 def generate_metrics_datasets(algorithm_id, k, ds_idx):
     algorithms = [KMeans, FCMeans]
-
+    n_sim = 30
     metrics = ['inter-cluster', 'cluster-separation', 'abgss', 
                'edge-index', 'cluster-connectedness', 'intra-cluster',
                'ball-hall', 'intracluster-entropy', 'ch-index', 'hartigan',
@@ -60,7 +61,7 @@ def generate_metrics_datasets(algorithm_id, k, ds_idx):
                'silhouette', 'min-max-cut', 'gap']
 
     custom_ds = []
-    for idx in range(2): #12
+    for idx in range(12): #12
         #Importing dataset
         ds = pd.read_csv("custom_datasets/{}/dataBase_{}.csv".format(ds_idx,idx))
         #Select lines and columns 
@@ -68,10 +69,16 @@ def generate_metrics_datasets(algorithm_id, k, ds_idx):
     
     algorithm = algorithms[algorithm_id]
 
-    met_db_results = execMetricsDatasets(
-        datasets=custom_ds, algorithm=algorithm, k=k, metrics=metrics, n_sim=2)
+    response = execMetricsDatasets(
+        datasets=custom_ds, algorithm=algorithm, k=k, metrics=metrics, n_sim=n_sim)
+    
+    #Write scenarios
+    file_name = 'scenarios/customds{}_ag{}_k{}_sim{}.json'.format(
+        ds_idx, algorithm_id, k, n_sim)
+    with open(file_name, 'w') as outfile:
+        json.dump(response, outfile)
 
-    return met_db_results
+    return response
 
 
 def prepareToListResponse(centroids, clusters):

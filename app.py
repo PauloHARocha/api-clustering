@@ -1,5 +1,7 @@
+import json
 from flask import Flask
 from flask_restful import Resource, Api
+from parameters import get_parameters
 from iterations import generate_iterations
 from comparison import generate_comparision
 from metricsIterations import generate_metrics_iterations
@@ -14,32 +16,13 @@ CORS(app)
 
 class Param(Resource):
     def get(self):
-        return {
-                'datasets': [
-                    {
-                        'name': 'Íris',
-                        'value': 0
-                    },
-                    {
-                        'name': 'Wine',
-                        'value': 1
-                    },
-                    {
-                        'name': 'Diabetes',
-                        'value': 2
-                    },
-                ],
-                'algorithms': [
-                    {
-                        'name': 'K-Means',
-                        'value': 0
-                    },
-                    {
-                        'name': 'FC-Means',
-                        'value': 1
-                    },
-                ]
-            }
+        return get_parameters()
+
+class Scenarios(Resource):
+    def get(self, scenario):
+        with open('scenarios/{}.json'.format(scenario), 'r') as f:
+            response = json.load(f)
+        return response
 
 class Iterations(Resource):
     def get(self, dataset_id, algorithm_id, k, m):
@@ -62,6 +45,8 @@ class MetricCustomDS(Resource):
         return generate_metrics_datasets(algorithm_id, k, ds_idx)
 
 api.add_resource(Param, '/param')
+
+api.add_resource(Scenarios, '/scenarios/<string:scenario>')
 
 api.add_resource(Iterations, '/iterations/<int:dataset_id>/<int:algorithm_id>/<int:k>/<int:m>')
 

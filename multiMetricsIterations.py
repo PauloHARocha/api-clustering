@@ -1,4 +1,5 @@
 import numpy as np
+import json
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
@@ -85,17 +86,22 @@ def generate_multi_metrics_iterations(dataset_id, algorithm_id, k, n_sim):
 
     algorithm = algorithms[algorithm_id]
 
-    met_results = execMetrics(
+    response = execMetrics(
         dataset=dataset, algorithm=algorithm, k=k, metrics=metrics, n_sim=n_sim)
+    
+    #Write scenarios
+    file_name = 'scenarios/ds{}_ag{}_k{}_sim{}.json'.format(dataset_id, algorithm_id, k, n_sim)
+    with open(file_name, 'w') as outfile:
+        json.dump(response, outfile)
 
-    return met_results
+    return response
 
 def prepareToList(centroids, clusters):
     for c in centroids:
-        centroids[c]=centroids[c].tolist()
+        centroids[c]=list(centroids[c])
 
     for c in clusters:
         for xi in range(len(clusters[c])):
-            clusters[c][xi]=clusters[c][xi].tolist()
+            clusters[c][xi]=list(clusters[c][xi])
     
     return centroids, clusters
