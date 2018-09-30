@@ -27,14 +27,50 @@ def get_parameters():
             'scenarios': {
                 'iterations':[
                     {
-                        'name': 'Iris/K-Means/k=2/sim=1',
-                        'value': 'ds0_ag0_k2_sim1'
+                        'name': 'Iris - FC-Means - k=2 - n_sim=30',
+                        'value': 'ds0_ag1_k2_sim30'
+                    },
+                    {
+                        'name': 'Iris - FC-Means - k=3 - n_sim=30',
+                        'value': 'ds0_ag1_k3_sim30'
+                    },
+                    {
+                        'name': 'Iris - FC-Means - k=4 - n_sim=30',
+                        'value': 'ds0_ag1_k4_sim30'
+                    },
+                    {
+                        'name': 'Wine - FC-Means - k=2 - n_sim=30',
+                        'value': 'ds1_ag1_k2_sim30'
+                    },
+                    {
+                        'name': 'Wine - FC-Means - k=3 - n_sim=30',
+                        'value': 'ds1_ag1_k3_sim30'
+                    },
+                    {
+                        'name': 'Wine - FC-Means - k=4 - n_sim=30',
+                        'value': 'ds1_ag1_k4_sim30'
                     },
                 ],
                 'customds':[
                     {
-                        'name': 'CustomDs0/FC-means/k=2/sim=30',
+                        'name': 'CustomDs=0 - FC-means - k=2 - n_sim=30',
                         'value': 'customds0_ag1_k2_sim30'
+                    },
+                    {
+                        'name': 'CustomDs=0 - FC-means - k=3 - n_sim=30',
+                        'value': 'customds0_ag1_k3_sim30'
+                    },
+                    {
+                        'name': 'CustomDs=0 - FC-means - k=4 - n_sim=30',
+                        'value': 'customds0_ag1_k4_sim30'
+                    },
+                    {
+                        'name': 'CustomDs=1 - FC-means - k=3 - n_sim=30',
+                        'value': 'customds1_ag1_k3_sim30'
+                    },
+                    {
+                        'name': 'CustomDs=1 - FC-means - k=4 - n_sim=30',
+                        'value': 'customds1_ag1_k2_sim30'
                     },
                 ]
             }
