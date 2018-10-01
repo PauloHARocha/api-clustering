@@ -65,12 +65,24 @@ def get_parameters():
                         'value': 'customds0_ag1_k4_sim30'
                     },
                     {
+                        'name': 'CustomDs=0 - FC-means - k=5 - n_sim=30',
+                        'value': 'customds0_ag1_k5_sim30'
+                    },
+                    {
+                        'name': 'CustomDs=1 - FC-means - k=2 - n_sim=30',
+                        'value': 'customds1_ag1_k2_sim30'
+                    },
+                    {
                         'name': 'CustomDs=1 - FC-means - k=3 - n_sim=30',
                         'value': 'customds1_ag1_k3_sim30'
                     },
                     {
                         'name': 'CustomDs=1 - FC-means - k=4 - n_sim=30',
-                        'value': 'customds1_ag1_k2_sim30'
+                        'value': 'customds1_ag1_k4_sim30'
+                    },
+                    {
+                        'name': 'CustomDs=1 - FC-means - k=5 - n_sim=30',
+                        'value': 'customds1_ag1_k5_sim30'
                     },
                 ]
             }
