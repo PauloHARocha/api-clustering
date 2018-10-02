@@ -1,17 +1,21 @@
+from sklearn import datasets
 def get_parameters():
     return {
             'datasets': [
                 {
                     'name': 'Íris',
-                    'value': 0
+                    'value': 0,
+                    'dimensions': datasets.load_iris()['feature_names']
                 },
                 {
                     'name': 'Wine',
-                    'value': 1
+                    'value': 1,
+                    'dimensions': datasets.load_wine()['feature_names']
                 },
                 {
                     'name': 'Diabetes',
-                    'value': 2
+                    'value': 2,
+                    'dimensions': datasets.load_diabetes()['feature_names']
                 },
             ],
             'algorithms': [
