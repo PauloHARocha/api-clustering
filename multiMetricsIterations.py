@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import json
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
