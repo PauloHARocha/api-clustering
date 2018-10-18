@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import json
 from tqdm import tqdm
 from sklearn import datasets
@@ -8,9 +9,7 @@ from algorithms.kmeans import KMeans
 from algorithms.fcmeans import FCMeans
 
 def generate_kvariance(dataset_id, algorithm_id, k_min, k_max, n_sim):
-    ds = [datasets.load_iris(), datasets.load_wine(),
-          datasets.load_diabetes()]
-
+    
     algorithms = [KMeans, FCMeans]
 
     metrics = ['inter-cluster', 'cluster-separation', 'abgss',
@@ -19,13 +18,28 @@ def generate_kvariance(dataset_id, algorithm_id, k_min, k_max, n_sim):
                'xu-index', 'wb-index', 'dunn-index', 'davies-bouldin', 'cs-measure',
                'silhouette', 'min-max-cut', 'gap']
 
-    dataset = ds[dataset_id]
-    dataset = dataset.data[:, :]
+    
+    if dataset_id == 3:
+        dataset = pd.read_csv("custom_datasets/dataPhDAlzheimerSemNomes.csv")
+        dataset = dataset.iloc[:, [3, 4, 5, 6]].values
+        normalize = False
+    elif dataset_id == 4:
+        dataset = pd.read_csv("custom_datasets/dataPhDAlzheimerSemNomes.csv")
+        dataset = dataset.iloc[:, [0, 1, 2, 3, 4, 5, 6]].values
+        normalize = False
+    else:
+        ds = [datasets.load_iris(), datasets.load_wine(),
+              datasets.load_diabetes()]
+        dataset = ds[dataset_id]
+        dataset = dataset.data[:, :]
+        normalize = True
+    
 
     algorithm = algorithms[algorithm_id]
     k_rng = range(k_min, k_max+1)
     response = execMetrics(
-        dataset=dataset, algorithm=algorithm, k_rng=k_rng, metrics=metrics, n_sim=n_sim, k_min=k_min)
+        dataset=dataset, algorithm=algorithm, k_rng=k_rng, metrics=metrics, 
+        n_sim=n_sim, k_min=k_min, normalize=normalize)
 
     #Write scenarios
     file_name = 'scenarios/ds{}_ag{}_k{}-{}_sim{}.json'.format(

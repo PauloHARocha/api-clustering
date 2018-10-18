@@ -81,8 +81,20 @@ def generate_multi_metrics_iterations(dataset_id, algorithm_id, k, n_sim):
                'xu-index', 'wb-index', 'dunn-index', 'davies-bouldin', 'cs-measure',
                'silhouette', 'min-max-cut']
 
-    dataset = ds[dataset_id]
-    dataset = dataset.data[:, :]
+    if dataset_id == 3:
+        dataset = pd.read_csv("custom_datasets/dataPhDAlzheimerSemNomes.csv")
+        dataset = dataset.iloc[:, [3, 4, 5, 6]].values
+        normalize = False
+    elif dataset_id == 4:
+        dataset = pd.read_csv("custom_datasets/dataPhDAlzheimerSemNomes.csv")
+        dataset = dataset.iloc[:, [0, 1, 2, 3, 4, 5, 6]].values
+        normalize = False
+    else:
+        ds = [datasets.load_iris(), datasets.load_wine(),
+              datasets.load_diabetes()]
+        dataset = ds[dataset_id]
+        dataset = dataset.data[:, :]
+        normalize = True
 
     algorithm = algorithms[algorithm_id]
 

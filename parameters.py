@@ -17,6 +17,16 @@ def get_parameters():
                     'value': 2,
                     'dimensions': datasets.load_diabetes()['feature_names']
                 },
+                {
+                    'name': 'Alzheimer Cognitive',
+                    'value': 3,
+                    'dimensions': [3, 4, 5, 6]
+                },
+                {
+                    'name': 'Alzheimer Social and Cognitive',
+                    'value': 4,
+                    'dimensions': [0, 1, 2, 3, 4, 5, 6]
+                },
             ],
             'algorithms': [
                 {
