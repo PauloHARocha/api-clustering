@@ -2,3 +2,4 @@ settings.json
 /images
 /__pycache__
 .vscode
+/algorithms/__pycache__

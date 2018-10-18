@@ -88,6 +88,13 @@ def get_parameters():
                         'name': 'CustomDs=1 - FC-means - k=5 - n_sim=30',
                         'value': 'customds1_ag1_k5_sim30'
                     },
+                ],
+                'kvariance': [
+                    {
+                        'name': 'Iris - K-Means - k=2-3 - n_sim=1',
+                        'value': 'ds0_ag0_k2-3_sim1',
+                    },
+                    
                 ]
             }
                 

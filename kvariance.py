@@ -25,7 +25,7 @@ def generate_kvariance(dataset_id, algorithm_id, k_min, k_max, n_sim):
     algorithm = algorithms[algorithm_id]
     k_rng = range(k_min, k_max+1)
     response = execMetrics(
-        dataset=dataset, algorithm=algorithm, k_rng=k_rng, metrics=metrics, n_sim=n_sim)
+        dataset=dataset, algorithm=algorithm, k_rng=k_rng, metrics=metrics, n_sim=n_sim, k_min=k_min)
 
     #Write scenarios
     file_name = 'scenarios/ds{}_ag{}_k{}-{}_sim{}.json'.format(
@@ -36,7 +36,7 @@ def generate_kvariance(dataset_id, algorithm_id, k_min, k_max, n_sim):
     return response
 
 
-def execMetrics(dataset, algorithm, k_rng, metrics, n_sim, normalize=True):
+def execMetrics(dataset, algorithm, k_rng, metrics, n_sim, k_min, normalize=True):
 
     mets_results = {}
     aux_metrics = {}
@@ -49,12 +49,13 @@ def execMetrics(dataset, algorithm, k_rng, metrics, n_sim, normalize=True):
 
     for met in metrics:
         mets_results[met] = []
-
     for sim in tqdm(range(n_sim), desc='sim'):
-
+        
+        sim_centroids = []
+        sim_clusters = []
+        
         for met in metrics:
             aux_metrics[met] = []
-
         for k in tqdm(k_rng, desc='k'):
             ag_exec = algorithm(data=dataset)
             ag_exec.fit(k=k)
@@ -64,6 +65,22 @@ def execMetrics(dataset, algorithm, k_rng, metrics, n_sim, normalize=True):
                 aux_metrics[met].append(Metrics.evaluate(
                     met, dataset, centroids, clusters, algorithm, k))
 
+            centroids, clusters = prepareToList( centroids, clusters)
+            
+            aux_centroids = []
+            aux_clusters = []
+            for cent in centroids:
+                aux_centroids.append({ 'name': cent, 'values': centroids[cent] })
+            
+            for clust in clusters:
+                aux_clusters.append({ 'name': clust, 'values': clusters[clust] })
+            
+            sim_centroids.append(aux_centroids)
+            sim_clusters.append(aux_clusters)
+
+        rs_centroids.append(sim_centroids)
+        rs_clusters.append(sim_clusters)
+
         for met in metrics:
             mets_results[met].append(aux_metrics[met])
 
@@ -72,6 +89,16 @@ def execMetrics(dataset, algorithm, k_rng, metrics, n_sim, normalize=True):
         rs_metrics.append({'name': met, 'values': mets_results[met]})
 
     response = {'centroids': rs_centroids, 'clusters': rs_clusters,
-                'metrics': rs_metrics, }
+                'metrics': rs_metrics, 'k_min': k_min}
     return response
 
+
+def prepareToList(centroids, clusters):
+    for c in centroids:
+        centroids[c]=list(centroids[c])
+
+    for c in clusters:
+        for xi in range(len(clusters[c])):
+            clusters[c][xi]=list(clusters[c][xi])
+    
+    return centroids, clusters
