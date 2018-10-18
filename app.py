@@ -3,7 +3,7 @@ from flask import Flask
 from flask_restful import Resource, Api
 from parameters import get_parameters
 from iterations import generate_iterations
-from comparison import generate_comparision
+from kvariance import generate_kvariance
 from metricsIterations import generate_metrics_iterations
 from multiMetricsIterations import generate_multi_metrics_iterations
 from metricsCustomDB import generate_metrics_datasets
@@ -28,9 +28,9 @@ class Iterations(Resource):
     def get(self, dataset_id, algorithm_id, k, m):
         return generate_iterations(dataset_id, algorithm_id, k, m)
 
-class Comparision(Resource):
+class KVariance(Resource):
     def get(self, dataset_id, algorithm_id, k_min, k_max, n_sim):
-        return generate_comparision(dataset_id, algorithm_id, k_min, k_max, n_sim)
+        return generate_kvariance(dataset_id, algorithm_id, k_min, k_max, n_sim)
 
 class MetricIterations(Resource):
     def get(self, dataset_id, algorithm_id, k):
@@ -51,7 +51,7 @@ api.add_resource(Scenarios, '/scenarios/<string:scenario>')
 api.add_resource(Iterations, '/iterations/<int:dataset_id>/<int:algorithm_id>/<int:k>/<int:m>')
 
 api.add_resource(
-    Comparision, '/comparision/<int:dataset_id>/<int:algorithm_id>/<int:k_min>/<int:k_max>/<int:n_sim>')
+    KVariance, '/kvariance/<int:dataset_id>/<int:algorithm_id>/<int:k_min>/<int:k_max>/<int:n_sim>')
 
 api.add_resource(
     MetricIterations, '/metrics_iterations/<int:dataset_id>/<int:algorithm_id>/<int:k>')
