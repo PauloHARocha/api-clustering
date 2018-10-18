@@ -12,11 +12,11 @@ def get_parameters():
                     'value': 1,
                     'dimensions': datasets.load_wine()['feature_names']
                 },
-                {
-                    'name': 'Diabetes',
-                    'value': 2,
-                    'dimensions': datasets.load_diabetes()['feature_names']
-                },
+                # {
+                #     'name': 'Diabetes',
+                #     'value': 2,
+                #     'dimensions': datasets.load_diabetes()['feature_names']
+                # },
                 {
                     'name': 'Alzheimer Cognitive',
                     'value': 3,
@@ -101,8 +101,12 @@ def get_parameters():
                 ],
                 'kvariance': [
                     {
-                        'name': 'Iris - K-Means - k=2-3 - n_sim=1',
-                        'value': 'ds0_ag0_k2-3_sim1',
+                        'name': 'Iris - K-Means - k=2-8 - n_sim=15',
+                        'value': 'ds0_ag0_k2-8_sim15',
+                    },
+                    {
+                        'name': 'Iris - FC-Means - k=2-8 - n_sim=15',
+                        'value': 'ds0_ag1_k2-8_sim15',
                     },
                     
                 ]
