@@ -138,6 +138,7 @@ def generate_conf_matrix(ag_exec, dataset, ds_labeled, labels_names):
 
     y_true = conf_df.iloc[:,-2].values
     y_pred = conf_df.iloc[:,-1].values
+
     
     k_count = {}
     for k in range(ag_exec.k):
@@ -149,7 +150,7 @@ def generate_conf_matrix(ag_exec, dataset, ds_labeled, labels_names):
         for true, pred in zip(y_true, y_pred):
             if pred == k:
                 k_count[k][true] += 1
-
+    
     for k in k_count:
         label_count = 0
         new_label_name = ''
@@ -167,7 +168,7 @@ def generate_conf_matrix(ag_exec, dataset, ds_labeled, labels_names):
     conf_matrix = confusion_matrix(y_true, y_pred)
     cf_json = {}
     for row, label in zip(conf_matrix, labels_names):
-        cf_json[label] = list(row)
+        cf_json[label] = row.tolist()
     
     return cf_json
 
